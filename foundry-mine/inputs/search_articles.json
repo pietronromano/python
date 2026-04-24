@@ -1,0 +1,32 @@
+[
+    {
+        "id": "10",
+        "title": "Introduction to Machine Learning",
+        "content": "Machine learning is a subset of artificial intelligence that enables systems to learn and improve from experience. It uses algorithms to parse data, learn from it, and make decisions. Applications include image recognition, natural language processing, recommendation systems, and autonomous vehicles.",
+        "category": "Technology"
+    },
+    {
+        "id": "20",
+        "title": "Cloud Computing Fundamentals",
+        "content": "Cloud computing delivers computing services over the internet including servers, storage, databases, networking, software, and analytics. The key benefits are cost reduction, scalability, performance, reliability, and security. Major providers include Microsoft Azure, Amazon Web Services, and Google Cloud Platform.",
+        "category": "Technology"
+    },
+    {
+        "id": "30",
+        "title": "Sustainable Energy Solutions",
+        "content": "Sustainable energy encompasses solar, wind, hydroelectric, and geothermal power sources. These renewable energy technologies are crucial for reducing greenhouse gas emissions and combating climate change. Investment in clean energy has grown significantly in recent years.",
+        "category": "Science"
+    },
+    {
+        "id": "40",
+        "title": "Modern Software Development Practices",
+        "content": "Agile methodologies, DevOps, and continuous integration have transformed software development. Teams now deploy code multiple times a day using automated pipelines. Containerization with Docker and orchestration with Kubernetes enable reliable deployments across cloud environments.",
+        "category": "Technology"
+    },
+    {
+        "id": "50",
+        "title": "Data Privacy and Security",
+        "content": "Data privacy regulations like GDPR and CCPA require organizations to protect personal information. Security best practices include encryption, access controls, regular audits, and employee training. Zero-trust architecture is becoming the standard approach to enterprise security.",
+        "category": "Security"
+    }
+]

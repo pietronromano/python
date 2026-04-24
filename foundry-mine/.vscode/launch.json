@@ -1,0 +1,61 @@
+{
+  
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "API",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "main:app",
+                "--reload",
+                "--host", "0.0.0.0",
+                "--port", "8000"
+            ],
+            "jinja": true,
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/foundry_api"
+            }
+        },
+         {
+            "name": "Pytest Debug",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            //Run pytest with:
+            // - the -s flag to see print statements
+            // - the -v flag for verbose output (shows test names and results)
+            // -m "not slow" to exclude any tests marked as "slow" (see pytest.ini for marker definition)
+            "args": [
+                "-v",
+                "-s",
+                "-m", "not slow",
+                "${workspaceFolder}/test"
+            ],
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/.venv/bin/python"
+        },
+        {
+            "name": "Main Debug",
+            
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main_fdy_debug.py",
+            "console": "integratedTerminal",
+            // Add this line to specify Python 3.12 from your virtual environment
+            "python": "${workspaceFolder}/.venv/bin/python"
+        },
+        {
+            "name": "Current File: Python Debugger",
+            
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            // Add this line to specify Python 3.12 from your virtual environment
+            "python": "${workspaceFolder}/.venv/bin/python"
+        }
+    ]
+}

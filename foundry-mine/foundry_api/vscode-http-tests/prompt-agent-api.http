@@ -1,0 +1,79 @@
+# Use VS Code "REST Client" Extension by Huachao Mao to test API endpoints
+# Simple alternative to pytest for quick manual testing of specific API endpoints during development
+
+@baseUrl = http://localhost:8000/prompt-agent
+
+##########################################################################
+### Agent prompt endpoint - Add to Cache, obtain the chat_conversation_id
+POST {{baseUrl}}/add-to-cache
+Content-Type: application/json  
+
+{
+    "agent_name": "fitness-agent",
+    "model_deployment_name": "model-router",
+    "instructions_text": "You are a friendly and motivating fitness coach. You help people create workout plans, give exercise tips, and encourage healthy habits. Always be supportive and positive.",
+    "input_text": "<placeholder>"
+}
+
+# Sample response:
+{
+  "status": "created",
+  "chat_conversation_id": "conv_1ba23c5177878d0700mDJ1h3aQ5oiANL8vG0tTs0BCQpHhxnzW"
+}
+
+
+### Agent prompt endpoint - Beginner workout
+POST {{baseUrl}}/prompt
+Content-Type: application/json  
+
+{
+    "chat_conversation_id": "conv_1ba23c5177878d0700mDJ1h3aQ5oiANL8vG0tTs0BCQpHhxnzW",
+    "agent_name": "fitness-agent",
+    "model_deployment_name": "model-router",
+    "instructions_text": "<placeholder-same-as-before>",
+    "input_text": "Can you give me a simple workout plan for a beginner?"
+}
+
+### Continue conversation with the same agent - follow up question
+### Use previous_response_id from the previous response to continue the conversation with the same agent
+### NOTE can't use both chat_conversation_id and previous_response_id together - if we send both, exception is thrown: "Cannot specify both chat_conversation_id and previous_response_id"
+POST {{baseUrl}}/prompt
+Content-Type: application/json
+
+{
+    "previous_response_id": "resp_1ba23c5177878d070069e8880aeecc8190b11878a6b0bec751",
+    "agent_name": "fitness-agent",
+    "model_deployment_name": "model-router",
+    "instructions_text": "You are the same fitness coach",
+    "input_text": "What if I only have 20 minutes a day to work out?" 
+}
+
+
+### RESTART DEBUGGER se if can still continue conversation with the same agent - follow up question
+### Use previous_response_id from the previous response to continue the conversation with the same agent
+### If we send an incorrect previous_response_id, exception is thrown: "Invalid previous_response_id"
+POST {{baseUrl}}/prompt
+Content-Type: application/json
+
+{
+    "previous_response_id": "resp_1ba23c5177878d070069e8880aeecc8190b11878a6b0bec751",
+    "agent_name": "fitness-agent",
+    "model_deployment_name": "model-router",
+    "instructions_text": "You are the same fitness coach",
+    "input_text": "But what if I only have 10 minutes a day to work out?"
+}
+
+### Agent prompt endpoint - Advanced workout
+POST {{baseUrl}}/prompt
+Content-Type: application/json  
+
+{
+    "previous_response_id": "resp_1ba23c5177878d070069e8880aeecc8190b11878a6b0bec751",
+    "agent_name": "fitness-agent",
+    "model_deployment_name": "gpt-4.1",
+    "instructions_text": "You are a friendly and motivating fitness coach. You help people create workout plans, give exercise tips, and encourage healthy habits. Always be supportive and positive.",
+    "input_text": "Can you give me an advanced workout plan for an experienced athlete?"
+}
+
+##########################################################################
+

@@ -1,0 +1,59 @@
+# Use VS Code "REST Client" Extension by Huachao Mao to test API endpoints
+# Simple alternative to pytest for quick manual testing of specific API endpoints during development
+
+@baseUrl = http://localhost:8000/prompt-agent
+
+##########################################################################
+### Agent prompt endpoint - Add to Cache
+# NOTE: Don't add quotes around the instructions_text variables, as they will be included and form invalid JSON
+@instructions_text1 = You are a helpful assistant that can write and execute Python code to analyze data and create visualizations.
+@instructions_text2 = Always return the code you executed along with the results.
+@instructions_text3 = Analyze sales data and create visualizations.
+
+# Pre-requisite: upload a file using the setup API and use the returned file ID in the tool definitions
+# Pre-requisite: make sure to use a model deployment that supports code generation (e.g. gpt-4.1) when creating the agent, otherwise the agent will not be able to use the code tool and execute code, and you'll get an error response like: "This model does not support the following tools: CODE"
+POST {{baseUrl}}/add-to-cache
+Content-Type: application/json  
+
+{
+    "agent_name": "code-tool-agent",
+    "model_deployment_name": "gpt-4.1",
+    "instructions_text": "{{instructions_text1}} {{instructions_text2}} {{instructions_text3}}",
+    "tool_definitions": {
+        "CODE": {"uploaded_file_id": "assistant-26zUX86n4sb7SkiFYSx9FE"}
+    },
+    "input_text": "<placeholder>"
+}
+
+# Sample response:
+#{
+#  "status": "created",
+#  "chat_conversation_id": "conv_2f90d7325658adee00KNRSzV9ecieC5gmbzwBOcNDEWd6Ai1Pf"
+#}
+
+### Agent prompt endpoint - Use the code tool
+POST {{baseUrl}}/prompt
+Content-Type: application/json  
+
+{
+    "chat_conversation_id": "conv_2f90d7325658adee00KNRSzV9ecieC5gmbzwBOcNDEWd6Ai1Pf",
+    "agent_name": "code-tool-agent",
+    "model_deployment_name": "gpt-4.1",
+    "instructions_text": "<placeholder-same-as-before>",
+    "input_text": "Calculate the total revenue (price * quantity) for each drink and create a horizontal bar chart showing total revenue by drink, sorted from highest to lowest."
+}
+
+# Sample response:
+# {
+#   "response_id": "resp_2f90d7325658adee0069ea5ebefd2881909cf48f6a0963b06c",
+#   "output_text": "It looks like there was a backend error with matplotlib. Let me modify the plotting code to use a backend compatible with this notebook environment.\n\nI'll fix this and try plotting the horizontal bar chart again.The horizontal bar chart showing total revenue by drink, sorted from highest to lowest, has been created. You can view or download the chart using the link below:\n\n[Download the total revenue by drink chart](sandbox:/mnt/data/total_revenue_by_drink.png)",
+#   "instructions": "You are a helpful assistant that can write and execute Python code to analyze data and create visualizations. Always return the code you executed along with the results. Analyze sales data and create visualizations.",
+#   "model": "gpt-4.1",
+#   "total_tokens": 2761,
+#   "input_tokens": 2297,
+#   "output_tokens": 464,
+#   "chat_conversation_id": "conv_2f90d7325658adee00KNRSzV9ecieC5gmbzwBOcNDEWd6Ai1Pf"
+# }
+
+########################################################################--
+

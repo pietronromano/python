@@ -1,0 +1,104 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+
+    /*
+     * =========================================================================
+     *  AZURE AI CONTENT SAFETY — ARM TEMPLATE
+     * =========================================================================
+     *  Provisions an Azure AI Content Safety resource for the
+     *  foundry-content-safety demo.
+     *
+     *  This service powers:
+     *    - Text content moderation (hate, self-harm, sexual, violence)
+     *    - Image content moderation (same 4 categories)
+     *    - Severity scoring on a 0-6 scale (0=safe, 2=low, 4=medium, 6=high)
+     *
+     *  After deployment, copy the endpoint URL from the outputs and paste it
+     *  into the .env file as CONTENT_SAFETY_ENDPOINT.
+     *
+     *  RBAC: The user running the notebook needs the "Cognitive Services User"
+     *  role on this resource.
+     *
+     *  Deploy with:
+     *    az deployment group create \
+     *      --resource-group <your-rg> \
+     *      --template-file deploy-content-safety.json \
+     *      --parameters @deploy-content-safety.parameters.json
+     * =========================================================================
+     */
+
+    "parameters": {
+        "accountName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "metadata": {
+                "description": "Name for the Azure AI Content Safety resource. Must be unique within the resource group."
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Azure region. Content Safety is available in most regions. See https://learn.microsoft.com/azure/ai-services/content-safety/overview#region-availability"
+            }
+        },
+        "sku": {
+            "type": "string",
+            "defaultValue": "S0",
+            "allowedValues": ["F0", "S0"],
+            "metadata": {
+                "description": "Pricing tier. F0 = free (1K requests/month, text only). S0 = standard (pay-per-use, text + image). Only one F0 per subscription."
+            }
+        }
+    },
+
+    "resources": [
+        /*
+         * -----------------------------------------------------------------
+         *  AZURE AI CONTENT SAFETY RESOURCE
+         *  Kind: "ContentSafety" — the dedicated content moderation service.
+         *
+         *  Note: This can also be deployed as part of a multi-service
+         *  "CognitiveServices" account, but using a dedicated Content Safety
+         *  resource gives clearer billing and access control.
+         *
+         *  The custom subdomain creates a clean endpoint URL:
+         *    https://<accountName>.cognitiveservices.azure.com/
+         * -----------------------------------------------------------------
+         */
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2024-10-01",
+            "name": "[parameters('accountName')]",
+            "location": "[parameters('location')]",
+            "kind": "ContentSafety",
+            "sku": {
+                "name": "[parameters('sku')]"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "customSubDomainName": "[parameters('accountName')]",
+                "publicNetworkAccess": "Enabled",
+                "disableLocalAuth": false
+            }
+        }
+    ],
+
+    "outputs": {
+        "contentSafetyEndpoint": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('accountName'))).endpoint]",
+            "metadata": {
+                "description": "Paste this value into .env as CONTENT_SAFETY_ENDPOINT"
+            }
+        },
+        "resourceId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accountName'))]"
+        }
+    }
+}

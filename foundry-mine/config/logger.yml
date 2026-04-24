@@ -1,0 +1,29 @@
+# References: https://docs.python.org/3/howto/logging.html
+
+version: 1
+disable_existing_loggers: False  # Add this line to prevent disabling existing loggers
+handlers:
+  console:
+    class : logging.StreamHandler
+    formatter: brief
+    level   : DEBUG # Set the minimum log level for this handler: DEBUG, INFO, WARNING, ERROR, CRITICAL
+    stream  : ext://sys.stdout
+  file:
+    class : logging.handlers.RotatingFileHandler
+    formatter: precise
+    filename: logs/foundry_logger.log
+    maxBytes: 1024
+    backupCount: 3
+
+formatters:
+  brief:
+    format: '%(message)s'
+  precise:
+    format: '%(asctime)s %(levelname)-8s %(name)-15s %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+
+loggers:
+  foundry_logger: #name of the logger to use in the code: e.g.: logger = logging.getLogger("foundry_logger")
+    level: DEBUG
+    # other configuration for logger 
+    handlers: [console, file]

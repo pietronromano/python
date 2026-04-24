@@ -1,0 +1,57 @@
+# Use VS Code "REST Client" Extension by Huachao Mao to test API endpoints
+# Simple alternative to pytest for quick manual testing of specific API endpoints during development
+
+@baseUrl = http://localhost:8000/language
+
+
+##########################################################################
+
+### Language detection endpoint
+POST {{baseUrl}}/detect
+Content-Type: application/json
+
+{
+    "documents": [
+        "Bonjour, comment allez-vous aujourd'hui ?",
+        "Ich lerne gerne neue Programmiersprachen.",
+        "La inteligencia artificial está cambiando el mundo."
+    ]
+}
+
+### Key phrase extraction endpoint
+POST {{baseUrl}}/extract-key-phrases
+Content-Type: application/json
+
+{
+    "documents": [
+            "Microsoft Azure provides a wide range of cloud services including ",
+            "virtual machines, Kubernetes clusters, serverless functions, and ",
+            "managed databases that help organizations scale their infrastructure."
+        ]
+}
+
+### Analyze Sentiment endpoint
+POST {{baseUrl}}/analyze-sentiment
+Content-Type: application/json
+
+{
+    "documents": [
+            "The new update is fantastic -- performance improved dramatically and the UI feels much smoother.",
+            "I've been waiting three weeks for a response from support and still haven't heard back.",
+            "The package arrived on Tuesday as scheduled."
+        ]
+}
+
+### Entity Recognition endpoint
+POST {{baseUrl}}/recognize-entities
+Content-Type: application/json
+
+{
+    "documents": [
+            "In January 2025, OpenAI announced a partnership with Microsoft ",
+            "to invest $10 billion in artificial intelligence research at ",
+            "their campus in San Francisco."
+        ]
+}
+
+##########################################################################

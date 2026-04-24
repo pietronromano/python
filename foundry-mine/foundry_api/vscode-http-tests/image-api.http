@@ -1,0 +1,33 @@
+# Use VS Code "REST Client" Extension by Huachao Mao to test API endpoints
+# Simple alternative to pytest for quick manual testing of specific API endpoints during development
+
+@baseUrl = http://localhost:8000/image
+
+
+##########################################################################
+
+### Image SDK generation endpoint
+POST {{baseUrl}}/generate/sdk
+Content-Type: application/json
+
+{
+    "input_text": "A vintage travel poster for a magical floating city above the clouds, with hot air balloons, golden sunlight, and the text 'Visit Sky Harbor' at the bottom in bold retro lettering.",
+    "filename": "outputs/sky_harbor_poster_sdk.png",
+    "n": 1,
+    "size": "1024x1024",
+    "output_format": "png"
+}
+
+### Image OpenAI generation endpoint
+POST {{baseUrl}}/generate/openai
+Content-Type: application/json
+
+{
+    "input_text": "A vintage travel poster for a magical floating city above the clouds, with hot air balloons, golden sunlight, and the text 'Visit Sky Harbor' at the bottom in bold retro lettering.",
+    "filename": "outputs/sky_harbor_poster_openai.png",
+    "n": 1,
+    "size": "1024x1024",
+    "output_format": "png"
+}
+
+##########################################################################

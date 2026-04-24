@@ -1,0 +1,32 @@
+# Azure AI and Foundry packages
+azure-mgmt-cognitiveservices
+azure-ai-projects==2.0.1
+azure-identity
+azure-cognitiveservices-speech==1.48.2
+azure-ai-textanalytics==5.4.0
+azure-search-documents
+
+# OpenAI SDK
+openai==2.30.0
+
+# Configuration management
+python-dotenv
+
+# jsonref can load JSON files that use $ref pointers (common in OpenAPI specs)
+jsonref
+
+# For file uploads in FastAPI
+python-multipart
+
+# For testing
+pytest
+
+# For logging #PACKAGE NAME EXCEPTION: import=yaml, not pyyaml
+pyyaml 
+
+
+# FastAPI and related packages for building a simple API to test the agents
+fastapi
+uvicorn
+# httpx is an async HTTP client that can be used for testing FastAPI endpoints
+httpx

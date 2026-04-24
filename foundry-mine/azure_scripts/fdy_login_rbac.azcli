@@ -1,0 +1,63 @@
+# Login to Azure and set subscription
+
+## References:
+- Interactive: https://learn.microsoft.com/en-gb/cli/azure/authenticate-azure-cli-interactively?view=azure-cli-latest
+- Service Principal: https://learn.microsoft.com/en-gb/cli/azure/azure-cli-sp-tutorial-1?view=azure-cli-latest&tabs=bash
+
+# Get environment variables from .env file: we use absolute path to avoid issues with relative paths when running the script from different locations.
+## NOTE! POSSIBLE ERROR: An environment file is configured but terminal environment injection is disabled. 
+## Enable "python.terminal.useEnvFile" to use environment variables from .env files in terminals.
+
+clear
+echo "CURRENT DIRECTORY: $(pwd)"
+source /Users/macbookpro/dev/python/github/python/foundry-mine/.env
+
+ENV_VARS="AZURE_TENANT:$AZURE_TENANT, AZURE_SUBSCRIPTION:$AZURE_SUBSCRIPTION, AZURE_LOCATION:$AZURE_LOCATION, AZURE_RESOURCE_GROUP:$AZURE_RESOURCE_GROUP " 
+echo "ENV_VARS: $ENV_VARS"
+
+# Check Azure CLI version
+az version
+# Update Azure CLI if needed: SEE: https://learn.microsoft.com/en-us/cli/azure/update-azure-cli 
+az upgrade
+
+# If you want to disable the subscription selector feature, set the core.login_experience_v2 configuration property to off.
+az config set core.login_experience_v2=off
+
+# Login with a specific tenant: SEE https://learn.microsoft.com/en-us/cli/azure/authenticate-azure-cli-interactively?view=azure-cli-latest 
+az login --tenant $AZURE_TENANT
+
+# Set a specific Subscription
+az account set -s $AZURE_SUBSCRIPTION
+
+# Azure VM: From a command prompt inside the VM, sign in with a user-assigned managed identity with --client-id, --object-id, or --resource-id
+# SEE: https://learn.microsoft.com/en-us/cli/azure/authenticate-azure-cli-managed-identity?view=azure-cli-latest
+az login --identity --identity --object-id <object_id>
+
+
+# For administrators - grant access
+## SEE https://learn.microsoft.com/en-us/azure/foundry/tutorials/quickstart-create-foundry-resources?tabs=azurecli#for-administrators---grant-access
+
+## If you're administering a team, assign the Azure AI User role to team members so they can use the project and deployed models. This role provides the minimum permissions needed to build and test AI applications. For other roles you might need to assign, see Role-based access control for Microsoft Foundry
+
+
+# Get the project's resource ID:
+PROJECT_ID=$(az cognitiveservices account project show \
+  --name my-foundry-resource \
+  --resource-group my-foundry-rg \
+  --project-name my-foundry-project \
+  --query id -o tsv)
+
+# Assign the Azure AI User role to a team member:
+az role assignment create \
+    --role "Azure AI User" \
+    --assignee "user@contoso.com" \
+    --scope $PROJECT_ID
+
+
+# Verify the role assignment:
+az role assignment list \
+    --scope $PROJECT_ID \
+    --role "Azure AI User" \
+    --output table
+
+
