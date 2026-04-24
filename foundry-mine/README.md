@@ -1,7 +1,9 @@
-# My Foundry Tests
+# Foundry Tests
 
 ## TODO
 - [Structured Inputs](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/structured-inputs?pivots=python)
+- PyTests
+- Complete the API
 
 ---
 
@@ -89,7 +91,7 @@ python3 --version  # Should show Python 3.12.x
 deactivate
 ```
 
-## Install Required Paackages from requirements.txt:
+## Install Required Packages from requirements.txt:
 What's in requirements.txt?
 - `azure-mgmt-cognitiveservices`: manage deployments on Azure Cognitive Services
 - `azure-ai-projects`: list deployments and get an OpenAI client for testing ([PyPI](https://pypi.org/project/azure-ai-projects/))
