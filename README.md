@@ -22,7 +22,6 @@ Uber repo for Python examples and courses
 
 ## Install and Use Python 3.12
 
-
 ### Install Python
 Avoid Python 3.14+ (it has compatibility issues with the `openai` package).
 **macOS:**
